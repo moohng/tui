@@ -1,0 +1,37 @@
+// -------------
+// Loading
+// -------------
+.tui-icon__loading {
+  display: inline-flex;
+  animation: tuiLoading 1s steps(60, end) infinite;
+}
+.tui-icon__loading::before,
+.tui-icon__loading::after {
+  content: '';
+  display: block;
+  flex: 1;
+  box-sizing: border-box;
+  border: 2px solid;
+  opacity: 0.5;
+}
+.tui-icon__loading::before {
+  border-top-left-radius: 1000px;
+  border-bottom-left-radius: 1000px;
+  border-right-width: 0;
+  -webkit-mask-image: -webkit-linear-gradient(top,#000000 8%,rgba(0,0,0,0.3) 95%);
+}
+.tui-icon__loading::after {
+  border-top-right-radius: 1000px;
+  border-bottom-right-radius: 1000px;
+  border-left-width: 0;
+  -webkit-mask-image: -webkit-linear-gradient(225deg,rgba(0,0,0,0) 45%,rgba(0,0,0,0.3) 95%);
+}
+
+@keyframes tuiLoading {
+  0% {
+    transform: rotate3d(0, 0, 1, 0deg);
+  }
+  100% {
+    transform: rotate3d(0, 0, 1, 360deg);
+  }
+}
