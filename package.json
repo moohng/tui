@@ -2,11 +2,15 @@
   "name": "tui",
   "version": "1.0.0",
   "description": "tiny ui",
-  "main": "index.js",
+  "main": "lib/index.js",
+  "module": "lib/index.js",
+  "types": "packages/index.d.ts",
+  "moduleResolution": "node",
   "scripts": {
     "serve": "parcel serve index.html",
     "build:css": "gulp css",
-    "build:js": "babel src -x '.ts,.tsx' -d lib",
+    "build:js": "gulp js",
+    "build:lib": "gulp build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -28,8 +32,10 @@
     "@babel/preset-react": "^7.12.10",
     "@babel/preset-typescript": "^7.12.7",
     "autoprefixer": "^10.2.3",
+    "del": "^6.0.0",
     "esm": "^3.2.25",
     "gulp": "^4.0.2",
+    "gulp-babel": "^8.0.0",
     "gulp-postcss": "^9.0.0",
     "gulp-sass": "^4.1.0",
     "parcel": "^2.0.0-beta.1",
@@ -38,6 +44,6 @@
     "typescript": "^4.1.3"
   },
   "browserslist": [
-    "> 10%"
+    "> 0.5%"
   ]
 }

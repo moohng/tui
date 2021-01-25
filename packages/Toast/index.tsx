@@ -1,6 +1,6 @@
-import * as React from '../../tools/tan';
+import * as Tan from '../core/index';
 
-interface ToastOptions {
+export interface ToastOptions {
   text?: string; // 字符串 或 html模板
   type?: 'success' | 'error' | 'info' | 'warn' | 'loading' | 'toast';
   margin?: string;
@@ -8,12 +8,12 @@ interface ToastOptions {
   position?: 'top' | 'bottom' | 'center';
 }
 
-interface ToastFunction {
+export interface ToastFunction {
   (options: string | ToastOptions): void;
 }
 
-interface ToastObject {
-  (options: string | ToastOptions): void;
+export interface ToastObject {
+  (options: string | ToastOptions): () => void;
   info: ToastFunction;
   success: ToastFunction;
   error: ToastFunction;

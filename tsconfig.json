@@ -3,10 +3,11 @@
     "jsx": "preserve",
     "module": "esnext",
     "target": "esnext",
+    "outDir": "temp",
+    "declaration": true,
+    "declarationDir": "lib",
   },
-  "include": [
-    "src/**/*"
-  ],
+  "include": ["packages/**/*"],
   "exclude": [
     "node_modules",
   ],

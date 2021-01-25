@@ -2,15 +2,15 @@ type Props = {
   [key in string]?: any;
 };
 
-function createFragment() {
-  return document.createDocumentFragment();
-}
-
 interface FragmentTag {
   Fragment: DocumentFragment;
 }
 
 type TagMap = HTMLElementTagNameMap & FragmentTag;
+
+function createFragment() {
+  return document.createDocumentFragment();
+}
 
 export const Fragment: keyof FragmentTag = 'Fragment';
 

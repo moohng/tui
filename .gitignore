@@ -3,5 +3,7 @@
 
 node_modules
 
+temp
+
 dist
 lib

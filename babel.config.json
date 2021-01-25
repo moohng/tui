@@ -9,6 +9,9 @@
     [
       "@babel/preset-react",
       {
+        "pragma": "Tan.createElement",
+        "pragmaFrag": "Tan.Fragment",
+        "importSource": false,
         "useSpread": true
       }
     ],
@@ -16,8 +19,8 @@
       "@babel/preset-typescript",
       {
         "isTSX": true,
-        "allExtensions": true,
-        "jsxPragma": "createElement"
+        "jsxPragma": "Tan",
+        "allExtensions": true
       }
     ]
   ],

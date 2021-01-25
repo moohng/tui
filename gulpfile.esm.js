@@ -1,11 +1,15 @@
-import { src, dest } from 'gulp';
+import { src, dest, series, parallel } from 'gulp';
+import del from 'del';
+
 import sass from 'gulp-sass';
 import postCSS from 'gulp-postcss';
 import autoprefixer from 'autoprefixer';
 
+import babel from 'gulp-babel';
+
 export function css(cb) {
-  src(['src/components/**/style/*scss'], {
-    base: 'src/components',
+  src(['packages/**/style/*scss'], {
+    base: 'packages',
   })
     .pipe(sass({
       outputStyle: 'expanded',
@@ -15,3 +19,19 @@ export function css(cb) {
 
   cb();
 }
+
+export function js(cb) {
+  src(['packages/**/*.ts', 'packages/**/*.tsx'], {
+    base: 'packages',
+  })
+    .pipe(babel())
+    .pipe(dest('lib'));
+
+  cb();
+}
+
+export function clean() {
+  return del(['lib']);
+}
+
+export const build = series(clean, parallel(js, css));

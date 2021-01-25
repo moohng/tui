@@ -1,4 +1,4 @@
-import { Toast } from './components/index';
+import { Toast } from '../lib/index';
 
 const hide = Toast('123');
 
