@@ -1,6 +1,7 @@
 import * as Tan from '../core/index';
+import { fadeIn, fadeOut } from '../core/animate';
 
-export interface ToastOptions {
+interface ToastOptions {
   text?: string; // 字符串 或 html模板
   type?: 'success' | 'error' | 'info' | 'warn' | 'loading' | 'toast';
   margin?: string;
@@ -8,12 +9,16 @@ export interface ToastOptions {
   position?: 'top' | 'bottom' | 'center';
 }
 
-export interface ToastFunction {
-  (options: string | ToastOptions): void;
+interface ToastHide {
+  (): void;
 }
 
-export interface ToastObject {
-  (options: string | ToastOptions): () => void;
+interface ToastFunction {
+  (options: string | ToastOptions): ToastHide;
+}
+
+interface ToastObject {
+  (options: string | ToastOptions): ToastHide;
   info: ToastFunction;
   success: ToastFunction;
   error: ToastFunction;
@@ -54,15 +59,11 @@ const Toast: ToastObject = (options) => {
   }
 
   // 显示
-  document.body.append(...[].concat($toast));
-  setTimeout(() => toggle($toast, 'show'));
+  fadeIn($toast, document.body);
 
   // 隐藏
   const hide = () => {
-    toggle($toast, 'show');
-    setTimeout(() => {
-      removeElement($toast);
-    }, 300);
+    fadeOut($toast, true);
   };
 
   if (options.type !== 'loading') {
@@ -77,25 +78,5 @@ Toast.success = (text: string) => Toast({ text, type: 'success' });
 Toast.error = (text: string) => Toast({ text, type: 'error' });
 Toast.warn = (text: string) => Toast({ text, type: 'warn' });
 Toast.loading = (text: string = '正在加载') => Toast({ text, type: 'loading' });
-
-function toggle(node: HTMLElement | [HTMLElement], className: string) {
-  if (Array.isArray(node)) {
-    node.forEach(($item) => {
-      $item.classList.toggle(className);
-    })
-  } else {
-    node.classList.toggle(className);
-  }
-}
-
-function removeElement(node: HTMLElement | [HTMLElement]) {
-  if (Array.isArray(node)) {
-    node.forEach(($item) => {
-      $item.remove();
-    })
-  } else {
-    node.remove();
-  }
-}
 
 export default Toast;

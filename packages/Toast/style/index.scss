@@ -1,17 +1,14 @@
+@import '../../style/icon';
+@import '../../style//mask';
+
 .tui-toast {
   position: fixed;
   color: #fff;
   text-align: center;
   background-color: rgba(76, 76, 76, .96);
   border-radius: 8px;
-  transition: all .3s ease-out;
   pointer-events: none;
-  opacity: 0;
   z-index: 99999;
-
-  &.show {
-    opacity: 1;
-  }
 
   &[data-type=loading] {
     padding: 16px 12px;
@@ -77,13 +74,4 @@
   &[data-type=warn] {
     background-color: #cc9c00;
   }
-}
-
-.mask {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 99998;
 }

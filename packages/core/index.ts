@@ -1,5 +1,5 @@
-type Props = {
-  [key in string]?: any;
+interface Props {
+  [key: string]: any;
 };
 
 interface FragmentTag {

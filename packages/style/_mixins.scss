@@ -1,0 +1,60 @@
+// iPhone X 兼容
+@mixin ipx($p, $v) {
+  @media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-min-device-pixel-ratio: 3) {
+    #{$p}: $v;
+  }
+  @media only screen and (device-width: 414px) and (device-height: 896px) and (-webkit-min-device-pixel-ratio: 3) {
+    #{$p}: $v;
+  }
+}
+
+@mixin position($value, $top: initial, $right: initial, $bottom: initial, $left: initial) {
+  position: $value;
+  top: $top;
+  right: $right;
+  bottom: $bottom;
+  left: $left;
+}
+
+@mixin fixed($dir: None) {
+  @if $dir == top {
+    @include position(fixed,  $top: 0, $right: 0, $left: 0);
+  }
+  @if $dir == bottom {
+    @include position(fixed, $right: 0, $bottom: 0, $left: 0);
+  }
+  @if $dir == left {
+    @include position(fixed, $top: 0, $bottom: 0, $left: 0);
+  }
+  @if $dir == right {
+    @include position(fixed, $right: 0, $bottom: 0, $top: 0);
+  }
+  @if $dir == None {
+    @include position(fixed, 0, 0, 0, 0);
+  }
+}
+
+@mixin abs($dir: None) {
+  @if $dir == top {
+    @include position(absolute,  $top: 0, $right: 0, $left: 0);
+  }
+  @if $dir == bottom {
+    @include position(absolute, $right: 0, $bottom: 0, $left: 0);
+  }
+  @if $dir == left {
+    @include position(absolute, $top: 0, $bottom: 0, $left: 0);
+  }
+  @if $dir == right {
+    @include position(absolute, $right: 0, $bottom: 0, $top: 0);
+  }
+  @if $dir == None {
+    @include position(absolute, 0, 0, 0, 0);
+  }
+}
+
+@mixin center($pos: absolute) {
+  position: $pos;
+  left: 50%;
+  top: 50%;
+  transform: translate3d(-50%, -50%, 0);
+}

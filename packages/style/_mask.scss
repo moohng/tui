@@ -1,0 +1,10 @@
+@import './mixins';
+
+.mask {
+  @include fixed;
+  z-index: 99998;
+
+  &.cover  {
+    background-color: rgba(0, 0, 0, .6);
+  }
+}
