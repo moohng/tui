@@ -1,7 +1,3 @@
-interface Props {
-  [key: string]: any;
-};
-
 interface FragmentTag {
   Fragment: DocumentFragment;
 }
@@ -14,7 +10,7 @@ function createFragment() {
 
 export const Fragment: keyof FragmentTag = 'Fragment';
 
-export function createElement<K extends keyof TagMap>(node: K | TagMap[K] | HTMLElement, props?: Props, ...children: (HTMLElement | string)[]) {
+export function createElement<K extends keyof TagMap>(node: K | TagMap[K] | HTMLElement, props?: Record<string, unknown>, ...children: (HTMLElement | string)[]) {
   // 创建 DOM
   if (typeof node === 'string') {
     if (node === Fragment) {
@@ -28,7 +24,7 @@ export function createElement<K extends keyof TagMap>(node: K | TagMap[K] | HTML
     // 如果是 on 开头，则为事件监听
     const eventType = key.match(/^on(\w+)$/)?.[1];
     if  (eventType && typeof props[key] === 'function') {
-      (node as TagMap[K]).addEventListener(eventType.toLocaleLowerCase(), props[key], false);
+      (node as TagMap[K]).addEventListener(eventType.toLocaleLowerCase(), props[key] as EventListenerOrEventListenerObject, false);
     } else {
       const _key = key.replace(/[A-Z0-9]/g, v => '-' + v.toLocaleLowerCase());
       if ((node as any).setAttribute) {

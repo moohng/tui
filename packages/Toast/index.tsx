@@ -5,7 +5,7 @@ interface ToastOptions {
   text?: string; // 字符串 或 html模板
   type?: 'success' | 'error' | 'info' | 'warn' | 'loading' | 'toast';
   margin?: string;
-  delay?: number;
+  duration?: number;
   position?: 'top' | 'bottom' | 'center';
 }
 
@@ -14,7 +14,7 @@ interface ToastHide {
 }
 
 interface ToastFunction {
-  (options: string | ToastOptions): ToastHide;
+  (text: string): ToastHide;
 }
 
 interface ToastObject {
@@ -67,7 +67,7 @@ const Toast: ToastObject = (options) => {
   };
 
   if (options.type !== 'loading') {
-    setTimeout(hide, options.delay ?? 2000);
+    setTimeout(hide, options.duration ?? 2000);
   }
 
   return hide;

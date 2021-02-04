@@ -2,22 +2,22 @@ interface PopFunction {
   (node: HTMLElement[]): void
 }
 
-function pop() {}
+type CSSOptions = {
+  [K in keyof CSSStyleDeclaration]?: CSSStyleDeclaration[K];
+}
 
-export function transition(node: HTMLElement | HTMLElement[], options: {
+interface TransitionOptions {
   duration?: number;
   delay?: number;
   easing?: string;
-  from?: {
-    [P in keyof CSSStyleDeclaration]?: CSSStyleDeclaration[P];
-  };
-  to?: {
-    [P in keyof CSSStyleDeclaration]?: CSSStyleDeclaration[P];
-  };
+  from?: CSSOptions;
+  to?: CSSOptions;
   before?: PopFunction;
   after?: PopFunction;
   complete?: PopFunction;
-}) {
+}
+
+export function transition(node: HTMLElement | HTMLElement[], options: TransitionOptions) {
   if (!options.from && !options.to) {
     return;
   }
@@ -26,9 +26,6 @@ export function transition(node: HTMLElement | HTMLElement[], options: {
     duration: 300,
     delay: 0,
     easing: 'ease',
-    before: pop,
-    after: pop,
-    complete: pop,
     ...options,
   };
 
@@ -40,31 +37,37 @@ export function transition(node: HTMLElement | HTMLElement[], options: {
     node = []
   }
 
-  options.before(node as [HTMLElement]);
+  options.before?.(node as [HTMLElement]);
 
   // 初始状态
   (node as [HTMLElement]).forEach(($item) => {
     $item.style.transition = `all ${options.duration}ms ${options.easing}`;
-    options.from && Object.entries(options.from).forEach(([key, value]) => {
-      $item.style[key] = value;
-    });
+    for (const key in options.from) {
+      if (Object.prototype.hasOwnProperty.call(options.from, key)) {
+        $item.style[key as any] = options.from[key as any] as any;
+      }
+    }
   });
 
-  options.after(node as [HTMLElement]);
+  options.after?.(node as [HTMLElement]);
 
   // 过渡状态
   setTimeout(() => {
     (node as [HTMLElement]).forEach(($item) => {
-      options.from && Object.keys(options.from).forEach((key) => {
-        $item.style[key] = '';
-      });
-      options.to && Object.entries(options.to).forEach(([key, value]) => {
-        $item.style[key] = value;
-      });
+      for (const key in options.from) {
+        if (Object.prototype.hasOwnProperty.call(options.from, key)) {
+          $item.style[key as any] = options.from[key as any] as any;
+        }
+      }
+      for (const key in options.to) {
+        if (Object.prototype.hasOwnProperty.call(options.to, key)) {
+          $item.style[key as any] = options.to[key as any] as any;
+        }
+      }
     });
     setTimeout(() => {
       // 结束
-      options.complete(node as [HTMLElement]);
+      options.complete?.(node as [HTMLElement]);
     }, options.duration);
   }, options.delay);
 }
