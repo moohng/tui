@@ -46,13 +46,13 @@ const Toast: ToastObject = (options) => {
   // 创建 DOM
   let $toast = options.type === 'loading' ? (
     <>
-      <div class="mask"></div>
-      <div class="tui-toast" dataType={options.type} dataPosition={options.position}>
-        <i class="tui-icon__loading"></i>
+      <div className="mask"></div>
+      <div className="tui-toast" dataType={options.type} dataPosition={options.position}>
+        <i className="tui-icon__loading"></i>
         <span>{options.text ?? ''}</span>
       </div>
     </>
-  ) : <div class="tui-toast" dataType={options.type} dataPosition={options.position}>{options.text ?? ''}</div>;
+  ) : <div className="tui-toast" dataType={options.type} dataPosition={options.position}>{options.text ?? ''}</div>;
 
   if ($toast instanceof DocumentFragment) {
     $toast = [].slice.call($toast.children);

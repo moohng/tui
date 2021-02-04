@@ -58,3 +58,33 @@
   top: 50%;
   transform: translate3d(-50%, -50%, 0);
 }
+
+@mixin solid($dir: None, $color: rgba(0, 0, 0, 0.06)) {
+  position: relative;
+  border-color: $color;
+  &::after {
+    content: '';
+    @include abs;
+    transform-origin: 0 0;
+    border-color: inherit;
+    border-radius: inherit;
+    pointer-events: none;
+    @media screen and (-webkit-min-device-pixel-ratio: 2) {
+      width: 200%;
+      height: 200%;
+      transform: scale(.5);
+    }
+    @media screen and (-webkit-min-device-pixel-ratio: 3) {
+      width: 300%;
+      height: 300%;
+      transform: scale(.33333);
+    }
+    @if $dir {
+      border-#{$dir}-style: solid;
+      border-#{$dir}-width: 1px;
+    } @else {
+      border-style: solid;
+      border-width: 1px;
+    }
+  }
+}

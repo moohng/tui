@@ -1,0 +1,16 @@
+body {
+  margin: 0;
+}
+
+.card {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.tui-button {
+  margin: 8px;
+}
+
+.tui-button + .tui-button {
+  margin-left: 24px;
+}

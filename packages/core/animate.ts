@@ -39,11 +39,13 @@ export function transition(node: HTMLElement | HTMLElement[], options: Transitio
 
   options.before?.(node as [HTMLElement]);
 
+  const hasOwnProperty = Object.prototype.hasOwnProperty;
+
   // 初始状态
   (node as [HTMLElement]).forEach(($item) => {
     $item.style.transition = `all ${options.duration}ms ${options.easing}`;
     for (const key in options.from) {
-      if (Object.prototype.hasOwnProperty.call(options.from, key)) {
+      if (hasOwnProperty.call(options.from, key)) {
         $item.style[key as any] = options.from[key as any] as any;
       }
     }
@@ -55,12 +57,12 @@ export function transition(node: HTMLElement | HTMLElement[], options: Transitio
   setTimeout(() => {
     (node as [HTMLElement]).forEach(($item) => {
       for (const key in options.from) {
-        if (Object.prototype.hasOwnProperty.call(options.from, key)) {
-          $item.style[key as any] = options.from[key as any] as any;
+        if (hasOwnProperty.call(options.from, key)) {
+          $item.style[key as any] = '';
         }
       }
       for (const key in options.to) {
-        if (Object.prototype.hasOwnProperty.call(options.to, key)) {
+        if (hasOwnProperty.call(options.to, key)) {
           $item.style[key as any] = options.to[key as any] as any;
         }
       }
@@ -72,7 +74,7 @@ export function transition(node: HTMLElement | HTMLElement[], options: Transitio
   }, options.delay);
 }
 
-interface FadeOptions {
+interface Options {
   duration?: number;
   delay?: number;
   easing?: string;
@@ -80,7 +82,7 @@ interface FadeOptions {
   complete?: () => void;
 }
 
-export function fadeIn(node: HTMLElement | HTMLElement[], options?: FadeOptions | HTMLElement) {
+export function fadeIn(node: HTMLElement | HTMLElement[], options?: Options | HTMLElement) {
   if (options instanceof HTMLElement) {
     options = {
       parent: options,
@@ -89,22 +91,22 @@ export function fadeIn(node: HTMLElement | HTMLElement[], options?: FadeOptions 
 
   return new Promise((resolve) => {
     transition(node, {
-      ...(options as FadeOptions) ?? {},
+      ...(options as Options) ?? {},
       from: {
         opacity: '0',
       },
       before: (node) => {
-        (options as FadeOptions).parent?.append(...node);
+        (options as Options).parent?.append(...node);
       },
       complete: () => {
-        (options as FadeOptions).complete?.();
+        (options as Options).complete?.();
         resolve(undefined);
       },
     });
   });
 }
 
-export function fadeOut(node: HTMLElement | HTMLElement[], options: FadeOptions | boolean) {
+export function fadeOut(node: HTMLElement | HTMLElement[], options: Options | boolean) {
   let remove: boolean;
   if (typeof options === 'boolean') {
     remove = options;
@@ -112,13 +114,60 @@ export function fadeOut(node: HTMLElement | HTMLElement[], options: FadeOptions 
 
   return new Promise((resolve) => {
     transition(node, {
-      ...(options as FadeOptions) ?? {},
+      ...(options as Options) ?? {},
       to: {
         opacity: '0',
       },
       complete: (node) => {
         remove && node.forEach($item => $item.remove());
-        (options as FadeOptions).complete?.();
+        (options as Options).complete?.();
+        resolve(undefined);
+      },
+    });
+  });
+}
+
+export function scaleIn(node: HTMLElement | HTMLElement[], options?: Options | HTMLElement) {
+  if (options instanceof HTMLElement) {
+    options = {
+      parent: options,
+    };
+  }
+
+  return new Promise((resolve) => {
+    transition(node, {
+      ...(options as Options) ?? {},
+      from: {
+        opacity: '0',
+        transform: 'scale(1.185)',
+      },
+      before: (node) => {
+        (options as Options).parent?.append(...node);
+      },
+      complete: () => {
+        (options as Options).complete?.();
+        resolve(undefined);
+      },
+    });
+  });
+}
+
+export function scaleOut(node: HTMLElement | HTMLElement[], options?: Options | boolean) {
+  let remove: boolean;
+  if (typeof options === 'boolean') {
+    remove = options;
+  }
+
+  return new Promise((resolve) => {
+    transition(node, {
+      ...(options as Options) ?? {},
+      to: {
+        opacity: '0',
+        transform: 'scale(1.185)',
+      },
+      complete: (node) => {
+        remove && node.forEach($item => $item.remove());
+        (options as Options)?.complete?.();
         resolve(undefined);
       },
     });

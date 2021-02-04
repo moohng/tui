@@ -6,7 +6,7 @@
   "module": "lib/index.js",
   "types": "packages/index.d.ts",
   "scripts": {
-    "serve": "parcel serve index.html",
+    "serve": "parcel serve index.html --no-cache",
     "build:css": "gulp css",
     "build:js": "babel packages -d lib -x \".ts,.tsx\"",
     "build:types": "tsc --emitDeclarationOnly",
