@@ -1,3 +1,5 @@
+import { flat } from '@moohng/dan';
+
 interface FragmentTag {
   Fragment: DocumentFragment;
 }
@@ -9,6 +11,27 @@ function createFragment() {
 }
 
 export const Fragment: keyof FragmentTag = 'Fragment';
+
+const hasOwnProperty = Object.prototype.hasOwnProperty;
+const toString = Object.prototype.toString;
+
+function classnames(className: string | Record<string, boolean> | (Record<string, boolean> | string)[]): string[] {
+  if (typeof className === 'string') {
+    const splitter = /\s+|\s*,\s*/;
+    return className.split(splitter).filter(item => item);
+  }
+  if (Array.isArray(className)) {
+    const r: string[] = [];
+    className.forEach(item => {
+      r.push.apply(r, classnames(item));
+    });
+    return r;
+  }
+  if (toString.call(className) === '[object Object]') {
+    return classnames(Object.keys(className).filter(item => className[item]));
+  }
+  return [];
+}
 
 export function createElement<K extends keyof TagMap>(node: K | TagMap[K] | HTMLElement, props?: Record<string, unknown>, ...children: (HTMLElement | string | HTMLElement[] | string[])[]) {
   // 创建 DOM
@@ -28,31 +51,13 @@ export function createElement<K extends keyof TagMap>(node: K | TagMap[K] | HTML
     } else if (key === 'style' && typeof props[key] !== 'string') {
       const style = props[key] as any
       for (const k in style) {
-        if (Object.prototype.hasOwnProperty.call(style, k)) {
+        if (hasOwnProperty.call(style, k)) {
           (node as HTMLElement).style[k] = style[k];
         }
       }
     } else if (key === 'className') {
-      const className = props[key];
-      let t: string[] = [];
-      let o = {};
-      if (Array.isArray(className)) {
-        className.forEach(item => {
-          if (typeof item === 'string') {
-            t.push(...item.split(/\s+|\s*,\s*/));
-          } else {
-            Object.assign(o, item);
-          }
-        });
-      } else if (typeof className === 'string') {
-        t.push(...className.split(/\s+|\s*,\s*/));
-      }
-      Object.keys(o).forEach(key => {
-        if (o[key]) {
-          t.push(key);
-        }
-      });
-      (node as HTMLElement).classList.add(...t.filter(i => i));
+      const className = classnames(props[key] as any);
+      (node as HTMLElement).classList.add.apply((node as HTMLElement).classList, className);
     } else {
       const _key = key.replace(/[A-Z0-9]/g, v => '-' + v.toLocaleLowerCase());
       if ((node as any).setAttribute) {
@@ -61,8 +66,8 @@ export function createElement<K extends keyof TagMap>(node: K | TagMap[K] | HTML
     }
   });
   // 递归子节点
-  const childNodes = [].flat.call(children, 100);
-  (node as TagMap[K]).append(...(childNodes as Node[]));
+  const childNodes = flat(children);
+  (node as TagMap[K]).append.apply((node as TagMap[K]), childNodes as Node[])
 
   return node;
 }

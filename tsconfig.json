@@ -12,6 +12,7 @@
     "strictNullChecks": true,
     "strictPropertyInitialization": true,
     "skipLibCheck": true,
+    "moduleResolution": "node"
   },
   "include": ["packages/**/*"],
 }

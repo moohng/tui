@@ -22,12 +22,11 @@ export function transition(node: HTMLElement | HTMLElement[], options: Transitio
     return;
   }
 
-  options = {
+  options = Object.assign({
     duration: 300,
     delay: 0,
     easing: 'ease',
-    ...options,
-  };
+  }, options);
 
   if (node instanceof DocumentFragment) {
     node = [].slice.call(node.children);
@@ -89,20 +88,19 @@ export function fadeIn(node: HTMLElement | HTMLElement[], options?: Options | HT
     };
   }
 
-  return new Promise((resolve) => {
-    transition(node, {
-      ...(options as Options) ?? {},
+  return new Promise<void>((resolve) => {
+    transition(node, Object.assign({}, options, {
       from: {
         opacity: '0',
       },
       before: (node) => {
-        (options as Options).parent?.append(...node);
+        HTMLElement.prototype.append.apply((options as Options).parent, node)
       },
       complete: () => {
-        (options as Options).complete?.();
-        resolve(undefined);
+        (options as Options)?.complete?.();
+        resolve();
       },
-    });
+    } as TransitionOptions));
   });
 }
 
@@ -112,18 +110,17 @@ export function fadeOut(node: HTMLElement | HTMLElement[], options: Options | bo
     remove = options;
   }
 
-  return new Promise((resolve) => {
-    transition(node, {
-      ...(options as Options) ?? {},
+  return new Promise<void>((resolve) => {
+    transition(node, Object.assign({}, options, {
       to: {
         opacity: '0',
       },
       complete: (node) => {
         remove && node.forEach($item => $item.remove());
-        (options as Options).complete?.();
-        resolve(undefined);
+        (options as Options)?.complete?.();
+        resolve();
       },
-    });
+    } as TransitionOptions));
   });
 }
 
@@ -134,21 +131,20 @@ export function scaleIn(node: HTMLElement | HTMLElement[], options?: Options | H
     };
   }
 
-  return new Promise((resolve) => {
-    transition(node, {
-      ...(options as Options) ?? {},
+  return new Promise<void>((resolve) => {
+    transition(node, Object.assign({}, options, {
       from: {
         opacity: '0',
         transform: 'scale(1.185)',
       },
       before: (node) => {
-        (options as Options).parent?.append(...node);
+        HTMLElement.prototype.append.apply((options as Options).parent, node)
       },
       complete: () => {
-        (options as Options).complete?.();
-        resolve(undefined);
+        (options as Options)?.complete?.();
+        resolve();
       },
-    });
+    } as TransitionOptions));
   });
 }
 
@@ -158,9 +154,8 @@ export function scaleOut(node: HTMLElement | HTMLElement[], options?: Options | 
     remove = options;
   }
 
-  return new Promise((resolve) => {
-    transition(node, {
-      ...(options as Options) ?? {},
+  return new Promise<void>((resolve) => {
+    transition(node, Object.assign({}, options, {
       to: {
         opacity: '0',
         transform: 'scale(1.185)',
@@ -168,8 +163,8 @@ export function scaleOut(node: HTMLElement | HTMLElement[], options?: Options | 
       complete: (node) => {
         remove && node.forEach($item => $item.remove());
         (options as Options)?.complete?.();
-        resolve(undefined);
+        resolve();
       },
-    });
+    } as TransitionOptions));
   });
 }

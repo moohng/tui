@@ -46,7 +46,7 @@ const Toast: ToastObject = (options) => {
   // 创建 DOM
   let $toast = options.type === 'loading' ? (
     <>
-      <div className="mask"></div>
+      <div className="mask loading"></div>
       <div className="tui-toast" dataType={options.type} dataPosition={options.position}>
         <i className="tui-icon__loading"></i>
         <span>{options.text ?? ''}</span>

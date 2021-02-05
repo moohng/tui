@@ -2,9 +2,13 @@
 
 .mask {
   @include fixed;
-  z-index: 99998;
+  z-index: 9998;
 
   &.cover  {
     background-color: rgba(0, 0, 0, .6);
+  }
+
+  &.loading {
+    z-index: 99998;
   }
 }

@@ -1,0 +1,27 @@
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "modules": false
+      }
+    ],
+    [
+      "@babel/preset-react",
+      {
+        "pragma": "Tan.createElement",
+        "pragmaFrag": "Tan.Fragment",
+        "importSource": false,
+        "useSpread": true
+      }
+    ],
+    [
+      "@babel/preset-typescript",
+      {
+        "isTSX": true,
+        "jsxPragma": "Tan",
+        "allExtensions": true
+      }
+    ]
+  ]
+}
