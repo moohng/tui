@@ -67,6 +67,9 @@ export function transition(node: HTMLElement | HTMLElement[], options: Transitio
       }
     });
     setTimeout(() => {
+      (node as [HTMLElement]).forEach(($item) => {
+        $item.style.transition = '';
+      });
       // 结束
       options.complete?.(node as [HTMLElement]);
     }, options.duration);
@@ -94,7 +97,7 @@ export function fadeIn(node: HTMLElement | HTMLElement[], options?: Options | HT
         opacity: '0',
       },
       before: (node) => {
-        HTMLElement.prototype.append.apply((options as Options).parent, node)
+        (options as Options)?.parent && HTMLElement.prototype.append.apply((options as Options).parent, node);
       },
       complete: () => {
         (options as Options)?.complete?.();
@@ -138,7 +141,7 @@ export function scaleIn(node: HTMLElement | HTMLElement[], options?: Options | H
         transform: 'scale(1.185)',
       },
       before: (node) => {
-        HTMLElement.prototype.append.apply((options as Options).parent, node)
+        (options as Options)?.parent && HTMLElement.prototype.append.apply((options as Options).parent, node)
       },
       complete: () => {
         (options as Options)?.complete?.();
