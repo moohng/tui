@@ -1,5 +1,5 @@
 import * as Tan from '../core';
-import { fadeIn, fadeOut, transition } from "../core/animate";
+import { fadeIn, fadeOut } from "../core/animate";
 import Swiper from '../core/swiper';
 
 type ImageList = string[];
@@ -13,23 +13,10 @@ interface Options {
   index?: number;
   closable?: boolean;
   onClick?: EventCallback;
-  onLongPress?: EventCallback;
 }
 
 interface HideFunction {
   (): void
-}
-
-function scrollTo(node: HTMLElement, x: number, duration = 300) {
-  return new Promise((resolve) => {
-    transition(node, {
-      duration,
-      to: {
-        transform: `translateX(${x}px) translateZ(0)`,
-      },
-      complete: resolve,
-    });
-  })
 }
 
 const Preview = (options: Options | ImageList, index = 0): HideFunction | void => {
@@ -39,7 +26,7 @@ const Preview = (options: Options | ImageList, index = 0): HideFunction | void =
     };
   }
 
-  const { index: _index = index, imageList, closable = false, onClick, onLongPress } = options;
+  const { index: _index = index, imageList, closable = false, onClick } = options;
 
   if (!imageList.length) {
     return;
@@ -56,7 +43,7 @@ const Preview = (options: Options | ImageList, index = 0): HideFunction | void =
   };
 
   const $preview = (
-    <div className="tui-preview" onClick={handleClick} onLongPress={onLongPress}>
+    <div className="tui-preview" onClick={handleClick}>
       <div className="tui-preview__container">
         <div className="tui-preview__wrapper">
           {imageList.map(image => (
@@ -71,15 +58,27 @@ const Preview = (options: Options | ImageList, index = 0): HideFunction | void =
     </div>
   );
 
-  document.body.append($preview);
+  let swiper: Swiper;
 
-  const swiper = new Swiper(($preview as HTMLElement).firstChild as HTMLElement);
-  console.log(swiper);
-
-  fadeIn($preview);
+  fadeIn($preview, {
+    parent: document.body,
+    mounted: () => {
+      swiper = new Swiper(($preview as HTMLElement).firstChild as HTMLElement, {
+        initialSlide: currentIndex,
+        direction: 'horizontal',
+        // loop: true,
+      });
+      swiper.on('change', (index) => {
+        currentIndex = index;
+        document.querySelector('.tui-preview__index')!.textContent = `${currentIndex + 1}/${length}`;
+      });
+    },
+  });
 
   const hide = () => {
-    fadeOut($preview, true);
+    fadeOut($preview, true).then(() => {
+      swiper.destroy();
+    });
   };
 
   return hide;

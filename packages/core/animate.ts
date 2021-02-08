@@ -13,7 +13,6 @@ interface TransitionOptions {
   from?: CSSOptions;
   to?: CSSOptions;
   before?: PopFunction;
-  after?: PopFunction;
   complete?: PopFunction;
 }
 
@@ -36,8 +35,6 @@ export function transition(node: HTMLElement | HTMLElement[], options: Transitio
     node = []
   }
 
-  options.before?.(node as [HTMLElement]);
-
   const hasOwnProperty = Object.prototype.hasOwnProperty;
 
   // 初始状态
@@ -50,7 +47,7 @@ export function transition(node: HTMLElement | HTMLElement[], options: Transitio
     }
   });
 
-  options.after?.(node as [HTMLElement]);
+  options.before?.(node as [HTMLElement]);
 
   // 过渡状态
   setTimeout(() => {
@@ -81,6 +78,7 @@ interface Options {
   delay?: number;
   easing?: string;
   parent?: HTMLElement;
+  mounted?: () => void;
   complete?: () => void;
 }
 
@@ -98,6 +96,7 @@ export function fadeIn(node: HTMLElement | HTMLElement[], options?: Options | HT
       },
       before: (node) => {
         (options as Options)?.parent && HTMLElement.prototype.append.apply((options as Options).parent, node);
+        (options as Options)?.mounted?.();
       },
       complete: () => {
         (options as Options)?.complete?.();
@@ -141,7 +140,8 @@ export function scaleIn(node: HTMLElement | HTMLElement[], options?: Options | H
         transform: 'scale(1.185)',
       },
       before: (node) => {
-        (options as Options)?.parent && HTMLElement.prototype.append.apply((options as Options).parent, node)
+        (options as Options)?.parent && HTMLElement.prototype.append.apply((options as Options).parent, node);
+        (options as Options)?.mounted?.();
       },
       complete: () => {
         (options as Options)?.complete?.();

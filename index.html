@@ -63,13 +63,19 @@
       };
 
       const handleClickPreview = () => {
-        const hide = Preview([
-          'https://scpic.chinaz.net/files/pic/pic9/202101/apic30573.jpg',
-          'https://scpic.chinaz.net/files/pic/pic9/202101/apic30607.jpg',
-          'https://scpic.chinaz.net/files/pic/pic9/202012/apic29825.jpg',
-          'https://scpic.chinaz.net/files/pic/pic9/201807/zzpic12710.jpg',
-          'https://scpic.chinaz.net/files/pic/pic9/202010/apic28292.jpg',
-        ], 2);
+        const hide = Preview({
+          imageList: [
+            'https://scpic.chinaz.net/files/pic/pic9/202101/apic30573.jpg',
+            'https://scpic.chinaz.net/files/pic/pic9/202101/apic30607.jpg',
+            'https://scpic.chinaz.net/files/pic/pic9/202012/apic29825.jpg',
+            'https://scpic.chinaz.net/files/pic/pic9/201807/zzpic12710.jpg',
+            'https://scpic.chinaz.net/files/pic/pic9/202010/apic28292.jpg',
+          ],
+          onClick: (index) => {
+            console.log('点击了', index);
+            hide();
+          },
+        }, 4);
       };
 
       return (
