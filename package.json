@@ -2,9 +2,11 @@
   "name": "@moohng/tui",
   "version": "1.0.0",
   "description": "tiny ui",
-  "main": "dist/tui.umd.js",
+  "main": "lib/index.js",
   "module": "lib/index.js",
-  "types": "packages/index.d.ts",
+  "types": "lib/index.d.ts",
+  "browser": "dist/tui.min.js",
+  "unpkg": "dist/tui.min.js",
   "scripts": {
     "serve": "parcel serve index.html --dist-dir build/cache --no-cache",
     "build:css": "gulp css",
@@ -18,7 +20,7 @@
   "files": [
     "dist",
     "lib",
-    "src"
+    "packages"
   ],
   "keywords": [
     "ui",
