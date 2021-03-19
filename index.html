@@ -14,11 +14,11 @@
   <div id="app"></div>
 
   <script type="module" lang="ts">
-    import { Preview, Toast } from './packages';
+    import { Preview, Toast, Dialog } from './packages';
 
     function App() {
       const handleClickDialog = () => {
-        tui.Dialog({
+        Dialog({
           title: '提示',
           content: '确认要这样做吗?',
           closable: true,

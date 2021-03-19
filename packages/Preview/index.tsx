@@ -66,9 +66,6 @@ const Preview = (options: Options | ImageList, index = 0): HideFunction | void =
       swiper = new Swiper(($preview as HTMLElement).firstChild as HTMLElement, {
         initialSlide: currentIndex,
         direction: 'horizontal',
-        loop: true,
-        autoplay: true,
-        freeMode: true,
       });
       swiper.on('change', (index) => {
         currentIndex = index;

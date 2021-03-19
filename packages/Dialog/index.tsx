@@ -40,17 +40,15 @@ const Dialog = (options: DialogOptions): Promise<number | void> => {
   
     // 创建 DOM
     let $dialog = (
-      <>
+      <div className="tui-dialog">
         <div className="mask cover" onClick={handleClickMask}></div>
-        <div className={['tui-dialog', className]}>
+        <div className={['tui-dialog__body', className]}>
           {title && <div className="tui-dialog__hd">{title}</div>}
           {content && <div className="tui-dialog__content">{content}</div>}
           {buttons?.length && <div className="tui-dialog__ft">{buttons.map((button, index) => <a className={['btn', (button as Button).className]} style={{color: (button as Button).color}} onClick={() => handleClickButton(index, button)}>{(button as Button).text || button}</a>)}</div>}
         </div>
-      </>
+      </div>
     );
-
-    $dialog = [].slice.call($dialog.children);
     
     // 显示
     scaleIn($dialog, document.body);

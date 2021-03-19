@@ -53,14 +53,16 @@ class Swiper {
     this.container = selector;
     this.wrapper = this.container.firstChild as HTMLElement;
 
-    this.options = Object.assign<SwiperOptions, SwiperOptions>({
+    this.options = Object.assign<SwiperOptions, SwiperOptions, SwiperOptions>({
       direction: 'horizontal',
       speed: 300,
       effect: 'slide',
       freeMode: false,
       initialSlide: 0,
       loop: false,
-    }, options);
+    }, options, {
+      freeMode: false,
+    });
     if (this.options.direction === 'vertical') {
       this.directionKey = 'y';
     }
@@ -233,15 +235,16 @@ class Swiper {
       // 执行滚动动画
       this.scrollTo();
     } else {
-        if (this.currentPosition[this.directionKey] < -this.offsetList[1]) {
-          this.currentIndex = 1;
-          this.scrollTo();
-        } else if (this.currentPosition[this.directionKey] > 0) {
-          this.currentIndex = 0;
-          this.scrollTo();
-        } else {
-          this.lastPosition = this.currentPosition;
-        }
+      if (this.currentPosition[this.directionKey] < -this.offsetList[1]) {
+        this.currentIndex = 1;
+        this.scrollTo();
+      } else if (this.currentPosition[this.directionKey] > 0) {
+        this.currentIndex = 0;
+        this.scrollTo();
+      } else {
+        this.lastPosition = this.currentPosition;
+        // TODO: 模拟滚动动画
+      }
     }
   }
 
@@ -303,6 +306,9 @@ class Swiper {
   }
 
   destroy() {
+    if (this.autoplay) {
+      clearTimeout(this.autoplayTimer);
+    }
     this.wrapper.removeEventListener('touchstart', this.handleTouchStart, false);
     this.wrapper.removeEventListener('touchmove', this.handleTouchMove, false);
     this.wrapper.removeEventListener('touchend', this.handleTouchEnd, false);
