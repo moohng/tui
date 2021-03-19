@@ -1,5 +1,5 @@
 {
-  "name": "tui",
+  "name": "@moohng/tui",
   "version": "1.0.0",
   "description": "tiny ui",
   "main": "dist/tui.umd.js",
