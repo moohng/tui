@@ -1,14 +1,12 @@
-import { src, dest, series, parallel } from 'gulp';
-import del from 'del';
+import { src, dest, parallel } from 'gulp';
 
 import sass from 'gulp-sass';
 import postCSS from 'gulp-postcss';
 import autoprefixer from 'autoprefixer';
+import rename from 'gulp-rename';
 
-import babel from 'gulp-babel';
-
-export function css(cb) {
-  src(['packages/**/style/*scss'], {
+export function css_lib(cb) {
+  src(['packages/**/style/*.scss'], {
     base: 'packages',
   })
     .pipe(sass({
@@ -20,18 +18,22 @@ export function css(cb) {
   cb();
 }
 
-export function js(cb) {
-  src(['packages/**/*.ts', 'packages/**/*.tsx'], {
-    base: 'packages',
-  })
-    .pipe(babel())
-    .pipe(dest('lib'));
+export function css_dist(cb) {
+  src(['packages/style/*.scss'])
+    .pipe(sass({
+      outputStyle: 'compressed',
+    }))
+    .pipe(postCSS([autoprefixer()]))
+    .pipe(rename((path) => {
+      if (path.basename === 'index') {
+        path.basename = 'tui';
+      }
+      path.extname = '.min.css';
+      return path;
+    }))
+    .pipe(dest('dist'))
 
   cb();
 }
 
-export function clean() {
-  return del(['lib']);
-}
-
-export const build = series(clean, parallel(js, css));
+export const css = parallel(css_lib, css_dist);

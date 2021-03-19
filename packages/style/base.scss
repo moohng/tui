@@ -1,0 +1,371 @@
+@import './mixins';
+
+html {
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  touch-action: manipulation;
+  -webkit-overflow-scrolling: touch;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system-font, Helvetica Neue, Helvetica, sans-serif;
+  word-break: break-all;
+}
+
+img {
+  max-width: 100%;
+  vertical-align: middle;
+}
+
+
+.solid {
+  @include solid;
+}
+@each $dir in top, right, bottom, left {
+  .solid-#{$dir} {
+    @include solid($dir)
+  }
+}
+
+@each $key, $value in (xxl: 48px, xl: 32px, lg: 24px, df: 16px, sm: 12px, xs: 8px, xxs: 4px) {
+  @if $key == df {
+    @each $dir, $dir2 in (t: top, r: right, b: bottom, l: left) {
+      .m#{$dir} {
+        margin-#{$dir2}: $value;
+      }
+      .p#{$dir} {
+        padding-#{$dir2}: $value;
+      }
+    }
+    .mg {
+      margin: $value;
+    }
+    .pd {
+      padding: $value;
+    }
+    .mtb {
+      margin-top: $value;
+      margin-bottom: $value;
+    }
+    .mlr {
+      margin-left: $value;
+      margin-right: $value;
+    }
+    .ptb {
+      padding-top: $value;
+      padding-bottom: $value;
+    }
+    .plr {
+      padding-left: $value;
+      padding-right: $value;
+    }
+  } @else {
+    @each $dir, $dir2 in (t: top, r: right, b: bottom, l: left) {
+      .m#{$dir}-#{$key} {
+        margin-#{$dir2}: $value;
+      }
+      .p#{$dir}-#{$key} {
+        padding-#{$dir2}: $value;
+      }
+    }
+    .m-#{$key} {
+      margin: $value;
+    }
+    .p-#{$key} {
+      padding: $value;
+    }
+    .mtb-#{$key} {
+      margin-top: $value;
+      margin-bottom: $value;
+    }
+    .mlr-#{$key} {
+      margin-left: $value;
+      margin-right: $value;
+    }
+    .ptb-#{$key} {
+      padding-top: $value;
+      padding-bottom: $value;
+    }
+    .plr-#{$key} {
+      padding-left: $value;
+      padding-right: $value;
+    }
+  }
+}
+
+/* 字体大小 */
+@each $key, $value in (xl: 20px, lg: 18px, md: 16px, df: 14px, sm: 12px, xs: 10px) {
+  .text-#{$key} {
+    font-size: $value;
+  }
+}
+.text-bold,
+.text-bolder {
+  font-weight: 700;
+}
+.text-cut {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+@for $row from 2 through 6 {
+  .text-cut-#{$row} {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: $row;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+/* 颜色 */
+@each $name, $value in (
+  (-red, #fa5151),
+  (-orange, #ff9056),
+  (-yellow, #fbbd08),
+  (-green, #07c160),
+  (-blue, #10aeff),
+  (-grey, #898989),
+  (-gray, #aaa),
+  (-light, #dfdfdf),
+  (-black, #333),
+  (-white, #fff),
+) {
+  @if ($name == -white) {
+    .bg#{$name} {
+      color: #333;
+      background-color: $value;
+    }
+  } @else {
+    .bg#{$name} {
+      @extend .text-white;
+      background-color: $value;
+    }
+  }
+  .text#{$name} {
+    color: $value;
+  }
+  .line#{$name} {
+    border-color: $value;
+  }
+}
+
+@each $dir in left, right, center {
+  .text-#{$dir} {
+    text-align: $dir;
+  }
+}
+
+.bg-img {
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  &.cover {
+    background-size: cover;
+  }
+  &.placeholder {
+    background-color: #f1f1f1;
+  }
+}
+
+.round {
+	border-radius: 20000px;
+}
+
+.uppercase {
+  text-transform: uppercase;
+}
+
+.lowercase {
+  text-transform: lowercase;
+}
+
+.flex {
+  display: flex;
+}
+.align-start {
+	align-items: flex-start;
+}
+.align-center {
+  align-items: center;
+}
+.align-end {
+	align-items: flex-end;
+}
+.align-stretch {
+	align-items: stretch;
+}
+.self-start {
+	align-self: flex-start;
+}
+.self-center {
+	align-self: center;
+}
+.self-end {
+	align-self: flex-end;
+}
+.self-stretch {
+	align-self: stretch;
+}
+.justify-start {
+	justify-content: flex-start;
+}
+.justify-end {
+	justify-content: flex-end;
+}
+.justify-center {
+  justify-content: center;
+}
+.justify-between {
+	justify-content: space-between;
+}
+.justify-around {
+	justify-content: space-around;
+}
+.flex-sub {
+  flex: 1;
+}
+.flex-column {
+	flex-direction: column;
+}
+.flex-wrap {
+	flex-wrap: wrap;
+}
+.flex-center {
+  @extend .flex;
+  @extend .justify-center;
+  @extend .align-center;
+}
+
+.center {
+  @include center;
+}
+
+.abs {
+  @include abs;
+}
+@each $dir in top, right, bottom, left {
+  .abs-#{$dir} {
+    @include abs($dir);
+  }
+}
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+}
+@mixin square($gapSpace, $index) {
+  position: relative;
+  margin-right: $gapSpace;
+  margin-bottom: $gapSpace;
+  padding-bottom: calc((100% - (#{$index - 1}) * #{$gapSpace}) / #{$index});
+  height: 0;
+  width: calc((100% - (#{$index - 1}) * #{$gapSpace}) / #{$index});
+  overflow: hidden;
+  &:nth-child(#{$index}n) {
+    margin-right: 0;
+  }
+  @for $idx from 1 through $index {
+    &:nth-child(#{$idx}) {
+      margin-top: $gapSpace;
+    }
+  }
+}
+@for $index from 1 through 5 {
+  .col-#{$index} {
+    width: 100 / $index * 1%;
+    box-sizing: border-box;
+    &.square.lg {
+      @include square(20px, $index);
+    }
+    &.square {
+      @include square(15px, $index);
+    }
+    &.square.sm {
+      @include square(10px, $index);
+    }
+    &.square.xs {
+      @include square(6px, $index);
+    }
+    &.square.xxs {
+      @include square(4px, $index);
+    }
+  }
+}
+
+.square {
+  position: relative;
+  padding-bottom: 100%;
+  height: 0;
+}
+
+.lh-0 {
+  line-height: 0;
+}
+.lh-1 {
+  line-height: 1;
+}
+.lh {
+  line-height: 1.6;
+}
+
+.fl {
+  float: left;
+}
+.fr {
+  float: right;
+}
+.clearfix {
+  *zoom: 1;
+  &::after {
+    content: '';
+    display: table;
+    clear: both;
+  }
+}
+
+.over-hidden {
+  overflow: hidden;
+}
+.over-scroll {
+  overflow: scroll;
+}
+.over-auto {
+  overflow: auto;
+}
+
+.relative {
+  position: relative;
+}
+
+.full {
+  width: 100%;
+  height: 100%;
+}
+.full-width {
+  width: 100%;
+}
+.full-height {
+  height: 100%;
+}
+
+.block {
+  display: block;
+}
+
+@each $dir in top, right, bottom, left, container {
+  @if ($dir == container) {
+    .safe {
+      padding: constant(safe-area-inset-top) constant(safe-area-inset-right) constant(safe-area-inset-bottom) constant(safe-area-inset-left);
+      padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    }
+  } @else {
+    .safe-#{$dir} {
+      padding-#{$dir}: constant(safe-area-inset-#{$dir});
+      padding-#{$dir}: env(safe-area-inset-#{$dir});
+    }
+  }
+}

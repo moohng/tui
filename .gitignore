@@ -4,6 +4,7 @@
 node_modules
 
 temp
+build/cache
 
 dist
 lib

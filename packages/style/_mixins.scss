@@ -79,7 +79,7 @@
       height: 300%;
       transform: scale(.33333);
     }
-    @if $dir {
+    @if $dir != None {
       border-#{$dir}-style: solid;
       border-#{$dir}-width: 1px;
     } @else {
