@@ -15,10 +15,22 @@
     "type-check": "tsc --noEmit",
     "test": "jest"
   },
+  "files": [
+    "dist",
+    "lib",
+    "src"
+  ],
   "keywords": [
     "ui",
     "tui"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:moohng/tui.git"
+  },
   "author": "Kevin",
   "license": "MIT",
   "dependencies": {
