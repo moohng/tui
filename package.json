@@ -1,6 +1,6 @@
 {
   "name": "@moohng/tui",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "tiny ui",
   "main": "lib/index.js",
   "module": "lib/index.js",
