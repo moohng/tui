@@ -66,7 +66,7 @@ export function createElement<K extends keyof TagMap>(node: K | TagMap[K] | HTML
     }
   });
   // 递归子节点
-  const childNodes = flat(children);
+  const childNodes = flat(children.filter(item => item || typeof item === 'number'));
   (node as TagMap[K]).append.apply((node as TagMap[K]), childNodes as Node[])
 
   return node;
