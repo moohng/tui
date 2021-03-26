@@ -1,11 +1,6 @@
 {
   "presets": [
-    [
-      "@babel/preset-env",
-      {
-        "modules": false
-      }
-    ],
+    "@babel/preset-env",
     [
       "@babel/preset-react",
       {
@@ -23,5 +18,17 @@
         "allExtensions": true
       }
     ]
-  ]
+  ],
+  "env": {
+    "es": {
+      "presets": [
+        [
+          "@babel/preset-env",
+          {
+            "modules": false
+          }
+        ]
+      ]
+    }
+  }
 }

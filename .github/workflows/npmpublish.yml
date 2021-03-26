@@ -26,9 +26,7 @@ jobs:
           node-version: 12
           registry-url: https://registry.npmjs.org/
       - run: yarn --frozen-lockfile
-      - run: yarn build:css
-      - run: yarn build:lib
-      - run: yarn build:dist
+      - run: yarn build
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
@@ -43,9 +41,7 @@ jobs:
           node-version: 12
           registry-url: https://npm.pkg.github.com/
       - run: yarn --frozen-lockfile
-      - run: yarn build:css
-      - run: yarn build:lib
-      - run: yarn build:dist
+      - run: yarn build
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
