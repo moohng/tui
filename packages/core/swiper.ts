@@ -91,9 +91,9 @@ class Swiper {
         this.currentIndex += 1;
       }
       // 计算 slide 距离
-      for (const $item of this.wrapper.children) {
+      [].slice.call(this.wrapper.children).forEach($item => {
         this.offsetList.push(this.options.direction === 'vertical' ? ($item as HTMLElement).offsetTop : ($item as HTMLElement).offsetLeft);
-      }
+      });
 
       // index
       this.scrollTo(0);
@@ -180,7 +180,7 @@ class Swiper {
       }
     }, 200);
   }
-  
+
   private handleTouchEnd() {
     if (!this.dir) {
       if (this.autoplay) {
@@ -192,7 +192,7 @@ class Swiper {
     if (!this.options.freeMode) {
       // 滑动到第几页了   [0, 375, 750, 1125, 1500]
       const index = this.offsetList.findIndex(item => -this.currentPosition[this.directionKey] < item);
-      
+
       if (this.dir === Direction.next) { // 向后滑动
         if (index >= 0) {
           if (-this.currentPosition[this.directionKey] - this.offsetList[index - 1] >= 20 || index === 0) {

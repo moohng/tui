@@ -7,15 +7,52 @@ type CSSOptions = {
 }
 
 interface TransitionOptions {
+  /**
+   * 动画持续时间
+   */
   duration?: number;
+  /**
+   * 动画延时时间
+   */
   delay?: number;
+  /**
+   * 动画类型
+   */
   easing?: string;
+  /**
+   * 初始状态
+   */
   from?: CSSOptions;
+  /**
+   * 变换状态
+   */
   to?: CSSOptions;
+  /**
+   * 动画即将开始前钩子函数（初始状态）
+   */
   before?: PopFunction;
+  /**
+   * 动画执行结束钩子函数（结束状态）
+   */
   complete?: PopFunction;
 }
 
+const hasOwnProperty = Object.prototype.hasOwnProperty;
+
+function setStyles(node: HTMLElement, styles?: CSSOptions, clear = false) {
+  for (const key in styles) {
+    if (hasOwnProperty.call(styles, key)) {
+      node.style[key] = clear ? '' : styles[key]!;
+    }
+  }
+}
+
+/**
+ * 过渡动画
+ * @param node 节点
+ * @param options 选项
+ * @returns
+ */
 export function transition(node: HTMLElement | HTMLElement[], options: TransitionOptions) {
   if (!options.from && !options.to) {
     return;
@@ -31,49 +68,37 @@ export function transition(node: HTMLElement | HTMLElement[], options: Transitio
     node = [].slice.call(node.children);
   } else if (node instanceof HTMLElement) {
     node = [node];
-  } else if (!Array.isArray(node)) {
-    node = []
   }
 
-  const hasOwnProperty = Object.prototype.hasOwnProperty;
+  if (!Array.isArray(node)) {
+    node = [];
+  }
 
   // 初始状态
-  (node as [HTMLElement]).forEach(($item) => {
+  node.forEach(($item) => {
     $item.style.transition = `all ${options.duration}ms ${options.easing}`;
-    for (const key in options.from) {
-      if (hasOwnProperty.call(options.from, key)) {
-        $item.style[key as any] = options.from[key as any] as any;
-      }
-    }
+    setStyles($item, options.from);
   });
 
-  options.before?.(node as [HTMLElement]);
+  options.before?.(node);
 
   // 过渡状态
   setTimeout(() => {
-    (node as [HTMLElement]).forEach(($item) => {
-      for (const key in options.from) {
-        if (hasOwnProperty.call(options.from, key)) {
-          $item.style[key as any] = '';
-        }
-      }
-      for (const key in options.to) {
-        if (hasOwnProperty.call(options.to, key)) {
-          $item.style[key as any] = options.to[key as any] as any;
-        }
-      }
+    (node as HTMLElement[]).forEach(($item) => {
+      setStyles($item, options.from, true);
+      setStyles($item, options.to);
     });
     setTimeout(() => {
-      (node as [HTMLElement]).forEach(($item) => {
+      (node as HTMLElement[]).forEach(($item) => {
         $item.style.transition = '';
       });
       // 结束
-      options.complete?.(node as [HTMLElement]);
+      options.complete?.(node as HTMLElement[]);
     }, options.duration);
   }, options.delay);
 }
 
-interface Options {
+interface InOptions {
   duration?: number;
   delay?: number;
   easing?: string;
@@ -82,7 +107,13 @@ interface Options {
   complete?: () => void;
 }
 
-export function fadeIn(node: HTMLElement | HTMLElement[], options?: Options | HTMLElement) {
+/**
+ * 进入动画（渐入）
+ * @param node 节点信息
+ * @param options 配置选项
+ * @returns
+ */
+export function fadeIn(node: HTMLElement | HTMLElement[], options?: InOptions | HTMLElement) {
   if (options instanceof HTMLElement) {
     options = {
       parent: options,
@@ -95,21 +126,36 @@ export function fadeIn(node: HTMLElement | HTMLElement[], options?: Options | HT
         opacity: '0',
       },
       before: (node) => {
-        (options as Options)?.parent && HTMLElement.prototype.append.apply((options as Options).parent, node);
-        (options as Options)?.mounted?.();
+        (options as InOptions)?.parent && HTMLElement.prototype.append.apply((options as InOptions).parent, node);
+        (options as InOptions)?.mounted?.();
       },
       complete: () => {
-        (options as Options)?.complete?.();
+        (options as InOptions)?.complete?.();
         resolve();
       },
     } as TransitionOptions));
   });
 }
 
-export function fadeOut(node: HTMLElement | HTMLElement[], options: Options | boolean) {
-  let remove: boolean;
+interface OutOptions {
+  duration?: number;
+  delay?: number;
+  easing?: string;
+  remove?: boolean;
+  complete?: () => void;
+}
+
+/**
+ * 渐出动画
+ * @param node 节点
+ * @param options 选项
+ * @returns
+ */
+export function fadeOut(node: HTMLElement | HTMLElement[], options: OutOptions | boolean) {
   if (typeof options === 'boolean') {
-    remove = options;
+    options = {
+      remove: options,
+    };
   }
 
   return new Promise<void>((resolve) => {
@@ -118,15 +164,21 @@ export function fadeOut(node: HTMLElement | HTMLElement[], options: Options | bo
         opacity: '0',
       },
       complete: (node) => {
-        remove && node.forEach($item => $item.remove());
-        (options as Options)?.complete?.();
+        (options as OutOptions)?.remove && node.forEach($item => $item.remove());
+        (options as OutOptions)?.complete?.();
         resolve();
       },
     } as TransitionOptions));
   });
 }
 
-export function scaleIn(node: HTMLElement | HTMLElement[], options?: Options | HTMLElement) {
+/**
+ * 缩放进入
+ * @param node
+ * @param options
+ * @returns
+ */
+export function scaleIn(node: HTMLElement | HTMLElement[], options?: InOptions | HTMLElement) {
   if (options instanceof HTMLElement) {
     options = {
       parent: options,
@@ -140,21 +192,28 @@ export function scaleIn(node: HTMLElement | HTMLElement[], options?: Options | H
         transform: 'scale(1.185)',
       },
       before: (node) => {
-        (options as Options)?.parent && HTMLElement.prototype.append.apply((options as Options).parent, node);
-        (options as Options)?.mounted?.();
+        (options as InOptions)?.parent && HTMLElement.prototype.append.apply((options as InOptions).parent, node);
+        (options as InOptions)?.mounted?.();
       },
       complete: () => {
-        (options as Options)?.complete?.();
+        (options as InOptions)?.complete?.();
         resolve();
       },
     } as TransitionOptions));
   });
 }
 
-export function scaleOut(node: HTMLElement | HTMLElement[], options?: Options | boolean) {
-  let remove: boolean;
+/**
+ * 缩放淡出
+ * @param node
+ * @param options
+ * @returns
+ */
+export function scaleOut(node: HTMLElement | HTMLElement[], options?: OutOptions | boolean) {
   if (typeof options === 'boolean') {
-    remove = options;
+    options = {
+      remove: options,
+    };
   }
 
   return new Promise<void>((resolve) => {
@@ -164,8 +223,8 @@ export function scaleOut(node: HTMLElement | HTMLElement[], options?: Options | 
         transform: 'scale(1.185)',
       },
       complete: (node) => {
-        remove && node.forEach($item => $item.remove());
-        (options as Options)?.complete?.();
+        (options as OutOptions)?.remove && node.forEach($item => $item.remove());
+        (options as OutOptions)?.complete?.();
         resolve();
       },
     } as TransitionOptions));
