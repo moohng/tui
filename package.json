@@ -1,6 +1,6 @@
 {
   "name": "@moohng/tui",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "tiny ui",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -21,7 +21,7 @@
   "files": [
     "dist",
     "lib",
-    "packages"
+    "es"
   ],
   "keywords": [
     "ui",
